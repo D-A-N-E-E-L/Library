@@ -1,0 +1,74 @@
+<?php
+
+namespace app\models;
+
+use yii\base\Model;
+use yii\data\ActiveDataProvider;
+use app\models\Books;
+
+/**
+ * BookspSearch represents the model behind the search form of `app\models\Books`.
+ */
+class BookspSearch extends Books
+{
+    /**
+     * {@inheritdoc}
+     */
+    public function rules()
+    {
+        return [
+            [['IDb', 'Pages'], 'integer'],
+            [['Author', 'Name', 'Cover', 'Year', 'Genre', 'AgeL'], 'safe'],
+        ];
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function scenarios()
+    {
+        // bypass scenarios() implementation in the parent class
+        return Model::scenarios();
+    }
+
+    /**
+     * Creates data provider instance with search query applied
+     *
+     * @param array $params
+     *
+     * @return ActiveDataProvider
+     */
+    public function search($params)
+    {
+        $query = Books::find();
+
+        // add conditions that should always apply here
+
+        $dataProvider = new ActiveDataProvider([
+            'query' => $query,
+        ]);
+
+        $this->load($params);
+
+        if (!$this->validate()) {
+            // uncomment the following line if you do not want to return any records when validation fails
+            // $query->where('0=1');
+            return $dataProvider;
+        }
+
+        // grid filtering conditions
+        $query->andFilterWhere([
+            'IDb' => $this->IDb,
+            'Pages' => $this->Pages,
+        ]);
+
+        $query->andFilterWhere(['like', 'Author', $this->Author])
+            ->andFilterWhere(['like', 'Name', $this->Name])
+            ->andFilterWhere(['like', 'Cover', $this->Cover])
+            ->andFilterWhere(['like', 'Year', $this->Year])
+            ->andFilterWhere(['like', 'Genre', $this->Genre])
+            ->andFilterWhere(['like', 'AgeL', $this->AgeL]);
+
+        return $dataProvider;
+    }
+}
