@@ -25,7 +25,7 @@ $this->params['breadcrumbs'][] = $this->title;
         'dataProvider' => $dataProvider,
         'columns' => [
           [
-            'label' => 'Картинка',
+            'label' => 'Обложка',
             'format' => 'raw',
             'value' => function ($model) {
               $image = $model['Cover'];
